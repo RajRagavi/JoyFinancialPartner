@@ -19,11 +19,10 @@ import Accounts from "./AdminUserUI/Accounts";
 import NoticePrints from "./AdminUserUI/NoticePrints";
 import Sidebar from "./AdminUserUI/Sidebar";
 
-
 import ProtectedRoute from "./Components/ProtectedRoute";
 import CreateUserForm from "./Components/CreateUserForm";
 
-
+import Kyc from "./Loantypes/Kyc"
 function App() {
   const [user] = useAuthState(auth);
 
@@ -47,6 +46,7 @@ function MainApp({ user }) {
     "/pending-lists",
     "/accounts",
     "/notice-prints",
+  "/kyc-vehicle",
   ];
 
   // Routes where Sidebar should be hidden
@@ -67,6 +67,7 @@ function MainApp({ user }) {
       {/* Main Content */}
       <div className="flex-1 p-4">
         {!hideNavbarRoutes.includes(location.pathname) && <Navbar />}
+        
 
         <Routes>
           <Route path="/" element={<Home />} />
@@ -75,7 +76,12 @@ function MainApp({ user }) {
           <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+
+
+            {/*Loanprocess submenu */}
           
+
+
           {/* Protected Routes */}
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/loan-process" element={<ProtectedRoute><Loanprocess /></ProtectedRoute>} />
@@ -83,6 +89,7 @@ function MainApp({ user }) {
           <Route path="/pending-lists" element={<ProtectedRoute><PendingLists /></ProtectedRoute>} />
           <Route path="/accounts" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />
           <Route path="/notice-prints" element={<ProtectedRoute><NoticePrints /></ProtectedRoute>} />
+          <Route path="/kyc-vehicle" element={<ProtectedRoute><Kyc /></ProtectedRoute>} />
           
           {/* Admin Routes */}
           <Route path="/admin" element={<ProtectedRoute allowedRoles={["admin"]}><Dashboard /></ProtectedRoute>} />
