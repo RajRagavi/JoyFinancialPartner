@@ -1,8 +1,25 @@
 import React from 'react'
 import { useState } from 'react';
+import BusinessLoan from './BusinessLoan';
+import PropertyLoan from './PropertyLoan';
 
 const Kyc = () => {
   const [selectedLoan, setSelectedLoan] = useState("");
+
+  const [formData, setFormData] =useState({
+    adhaarFile: null,
+    licenceFile: null,
+  });
+  const handleFileChange =(e) =>{
+    const{name, files} =e.target;
+    setFormData((prev) =>({
+      ...prev, [name]: files[0],
+    }))
+  }
+  const handleSubmit =(e) =>{
+    e.preventDefault();
+    console.log("uplaoded Files:", formData);
+  }
 
   const loanContent = {
     "Vehicle Loan": "List of active loans will be displayed here.",
@@ -14,11 +31,11 @@ const Kyc = () => {
 
       {/* Loan Type Buttons */}
       <div className="flex flex-wrap space-x-6 px-10 justify-between mb-6">
-        {["Vehicle Loan", "Business Loans", "Property Loans"].map((loanType) => (
+        {["Vehicle Loan", "Business Loan", "Property Loan"].map((loanType) => (
           <button
             key={loanType}
             onClick={() => setSelectedLoan(loanType)}
-            className={`px-6 py-10 rounded-lg text-white font-semibold shadow-md transition ${
+            className={`px-4 py-4 rounded-lg text-white font-semibold shadow-md transition ${
               selectedLoan === loanType ? "bg-blue-700" : "bg-blue-900 hover:bg-blue-700"
             }`}
           >
@@ -27,7 +44,7 @@ const Kyc = () => {
         ))}
       </div>
 
-      {/* Show Form Only for Active Loans */}
+      {/* Show Form Only for Vehicle Loans */}
       {selectedLoan === "Vehicle Loan" && (
         <div className="bg-white shadow-lg p-6 rounded-lg w-full max-w-5xl">
           <h2 className="text-xl font-semibold text-gray-800 mb-4">Vehicle Loan Form</h2>
@@ -38,7 +55,7 @@ const Kyc = () => {
               "Date", "CoBorrower Name *", "Vehicle Model & Year",
               "Father Name *", "CoBorrower Phone *", "Vehicle Value",
               "Phone Number *", "Monthly Income *", "Loan Required",
-               "Occupation",
+               "Occupation ", "Pan Card Number *",
             ].map((label, index) => (
               <div key={index} className="flex flex-col">
                 <label className="text-gray-700 text-sm font-medium">{label}</label>
@@ -48,6 +65,20 @@ const Kyc = () => {
                 />
               </div>
             ))}
+
+            {/* Upload Adhaar Card */}
+          <div className='flex flex-col'>
+            <label className='text-gray-700 text-sm font-medium'>Adhaar Card *</label>
+            <input type="file" name="adhaarFile" accept=".pdf,.jpg,.png" onChange={handleFileChange} 
+              className='border rounded p-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-400'/>
+          </div>
+
+          {/* Upload Licence */}
+          <div className='flex flex-col right-20'>
+            <label className='text-gray-700 text-sm font-medium'>Licence *</label>
+            <input type="file" name="licenceFile" accept=".pdf,.jpg,.png" onChange={handleFileChange} 
+              className='border rounded p-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-400'/>
+          </div>
 
             {/* Address Field with 3 Lines */}
             <div className="sm:col-span-2 md:col-span-3">
@@ -61,9 +92,19 @@ const Kyc = () => {
                 focus:outline-none focus:ring-2 focus:ring-blue-400" />
               </div>
             </div>
+
+            <div className='col-span-full mt-4 text-center'>
+            <button type="submit" 
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-700">
+              Submit
+            </button>
+          </div>
           </form>
         </div>
       )}
+      {/* Show Business Loan Form */}
+      {selectedLoan === "Business Loan" && <BusinessLoan />}
+      {selectedLoan === "Property Loan" &&<PropertyLoan />}
     </div>
       
   )
