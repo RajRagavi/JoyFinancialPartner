@@ -23,6 +23,9 @@ import ProtectedRoute from "./Components/ProtectedRoute";
 import CreateUserForm from "./Components/CreateUserForm";
 
 import Kyc from "./Loantypes/Kyc"
+import Vehiclepage1 from "./Loantypes/Vehiclepage1";
+import VehiclePage2 from "./Loantypes/VehiclePage2";
+import VehiclePage3 from "./Loantypes/VehiclePage3";
 function App() {
   const [user] = useAuthState(auth);
 
@@ -47,6 +50,9 @@ function MainApp({ user }) {
     "/accounts",
     "/notice-prints",
   "/kyc-vehicle",
+  "/vechile-next-page-one",
+  "/vechile-next-page-two",
+  "/vechile-next-page-three",
   ];
 
   // Routes where Sidebar should be hidden
@@ -90,6 +96,9 @@ function MainApp({ user }) {
           <Route path="/accounts" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />
           <Route path="/notice-prints" element={<ProtectedRoute><NoticePrints /></ProtectedRoute>} />
           <Route path="/kyc-vehicle" element={<ProtectedRoute><Kyc /></ProtectedRoute>} />
+          <Route path="/vechile-next-page-one" element={<ProtectedRoute><Vehiclepage1/></ProtectedRoute>} />
+          <Route path="/vechile-next-page-two" element={<ProtectedRoute><VehiclePage2/></ProtectedRoute>} />
+          <Route path="/vechile-next-page-three" element={<ProtectedRoute><VehiclePage3/></ProtectedRoute>} />
           
           {/* Admin Routes */}
           <Route path="/admin" element={<ProtectedRoute allowedRoles={["admin"]}><Dashboard /></ProtectedRoute>} />
