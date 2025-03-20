@@ -8,7 +8,7 @@ const steps = [
   { id: 1, label: "Borrower and Vehicle Details" },
   { id: 2, label: "Loan Details" },
   { id: 3, label: "Camera" },
-  { id: 4, label: "Camera" },
+  
 ];
 
 const Vehiclepage1 = () => {
@@ -493,9 +493,7 @@ const Vehiclepage1 = () => {
           )}
           {currentStep === 2 && <VehiclePage2 />}
           {currentStep === 3 && <VehiclePage3 />}
-          {currentStep === 4 && (
-            <h2 className="text-lg font-semibold">Camera Form</h2>
-          )}
+
         </div>
 
         {/* Previous & Next Buttons finish button */}
@@ -521,7 +519,7 @@ const Vehiclepage1 = () => {
             Next
           </button>
           {/* Finish Button */}
-          {currentStep === steps.length - 1 && (
+          {currentStep === steps.length - 0 && (
             <button
               onClick={finishProcess}
               className="px-4 py-2 bg-blue-900 text-white rounded-lg"

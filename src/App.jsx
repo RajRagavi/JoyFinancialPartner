@@ -22,10 +22,13 @@ import Sidebar from "./AdminUserUI/Sidebar";
 import ProtectedRoute from "./Components/ProtectedRoute";
 import CreateUserForm from "./Components/CreateUserForm";
 
-import Kyc from "./Loantypes/Kyc"
-import Vehiclepage1 from "./Loantypes/Vehiclepage1";
-import VehiclePage2 from "./Loantypes/VehiclePage2";
-import VehiclePage3 from "./Loantypes/VehiclePage3";
+import Kyc from "./AdminUserUI/Loantypes/Kyc"
+import Vehiclepage1 from "./AdminUserUI/Loantypes/Vehiclepage1";
+import VehiclePage2 from "./AdminUserUI/Loantypes/VehiclePage2";
+import VehiclePage3 from "./AdminUserUI/Loantypes/VehiclePage3";
+import Stafflogin from "./AdminUserUI/Loantypes/stafflogin/Stafflogin";
+import Staffloginpage2 from "./AdminUserUI/Loantypes/stafflogin/Staffloginpage2";
+import Staffloginpage3 from "./AdminUserUI/Loantypes/stafflogin/Staffloginpage3";
 function App() {
   const [user] = useAuthState(auth);
 
@@ -53,6 +56,9 @@ function MainApp({ user }) {
   "/vechile-next-page-one",
   "/vechile-next-page-two",
   "/vechile-next-page-three",
+  "/staff-login",
+  "/staff-login-page-two",
+  "/staff-login-page-three"
   ];
 
   // Routes where Sidebar should be hidden
@@ -99,6 +105,9 @@ function MainApp({ user }) {
           <Route path="/vechile-next-page-one" element={<ProtectedRoute><Vehiclepage1/></ProtectedRoute>} />
           <Route path="/vechile-next-page-two" element={<ProtectedRoute><VehiclePage2/></ProtectedRoute>} />
           <Route path="/vechile-next-page-three" element={<ProtectedRoute><VehiclePage3/></ProtectedRoute>} />
+          <Route path="/staff-login" element={<ProtectedRoute><Stafflogin/></ProtectedRoute>} />
+          <Route path="/staff-login-page-two" element={<ProtectedRoute><Staffloginpage2/></ProtectedRoute>} />
+          <Route path="/staff-login-page-three" element={<ProtectedRoute><Staffloginpage3/></ProtectedRoute>} />
           
           {/* Admin Routes */}
           <Route path="/admin" element={<ProtectedRoute allowedRoles={["admin"]}><Dashboard /></ProtectedRoute>} />

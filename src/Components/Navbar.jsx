@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import logo from "../assets/Images/Logo.png"
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -14,9 +15,7 @@ const Navbar = () => {
         <div className="container mx-auto flex justify-between items-center px-6 py-5">
           {/* Logo */}
           <div className="text-xl font-bold cursor-pointer" onClick={() => navigate("/")}>
-            <h1 className="text-gray-800 hover:text-blue-500 transition duration-300">
-              Financial Partner
-            </h1>
+            <img src={logo} alt="" className="w-[70px] h-[50px] object-cover"/>
           </div>
 
           {/* Desktop Menu */}

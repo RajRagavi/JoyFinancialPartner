@@ -22,7 +22,7 @@ const HeroSection = () => {
         src={Vector}
         className="absolute top-15 left-1 w-44 h-44 md:w-60 md:h-60 mt-20"
         animate={{
-          scale: [1, 1.1, 1], // Smooth scaling effect
+          rotate: [0, 10, -10, -10], // Smooth scaling effect
           opacity: [0.8, 1, 1] // Slight opacity variation
         }}
         transition={{
@@ -35,7 +35,7 @@ const HeroSection = () => {
         src={Vector1}
         className="absolute bottom-70 right-90 w-64 h-64 md:w-84 md:h-80 mt-20"
         animate={{
-          scale: [1, 1.1, 1], // Smooth scaling effect
+          rotate: [-10, 10, -10, 0], // Smooth scaling effect
           opacity: [0.8, 1, 1] // Slight opacity variation
         }}
         transition={{
@@ -48,7 +48,7 @@ const HeroSection = () => {
         src={Vector2}
         className="absolute top-20 right-30 w-64 h-64 md:w-84 md:h-80 mt-20"
         animate={{
-          scale: [1, 1.1, 1], // Smooth scaling effect
+          rotate: [0, 10, -10, -10], // Smooth scaling effect
           opacity: [0.8, 1, 1] // Slight opacity variation
         }}
         transition={{

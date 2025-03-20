@@ -1,7 +1,6 @@
 import React from "react";
 import { useState } from "react";
 import BusinessLoan from "./BusinessLoan";
-import PropertyLoan from "./Vehiclepage1";
 import { FaCloudUploadAlt } from "react-icons/fa";
 
 const Kyc = () => {
@@ -669,7 +668,7 @@ const Kyc = () => {
       )}
       {/* Show Business Loan Form */}
       {selectedLoan === "Gold Loan" && <BusinessLoan />}
-      {selectedLoan === "Property Loan" && <PropertyLoan />}
+      
     </div>
   );
 };
