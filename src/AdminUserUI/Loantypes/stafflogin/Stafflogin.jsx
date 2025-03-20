@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { Printer, Rss } from "lucide-react";
 import Staffloginpage2 from "./Staffloginpage2";
 import Staffloginpage3 from "./Staffloginpage3";
+import Emicalculator from "./Emicalculator";
 
 const Stafflogin = () => {
   
@@ -60,6 +61,7 @@ const Stafflogin = () => {
 
         {/* ✅ Step 1: Common Search */}
         {currentStep === 1 && (
+          <>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-6">
             <div className="flex flex-col">
               <label className="text-gray-700 text-sm font-medium">Loan ID</label>
@@ -101,7 +103,7 @@ const Stafflogin = () => {
               </button>
             </div>
           </div>
-        )}
+        
 
         {/* ✅ Table - Show After Search */}
         {currentStep === 1 && showTable && (
@@ -130,8 +132,9 @@ const Stafflogin = () => {
 
         {/* EMI Calculator */}
         <div>
-        EMI Calculator
-        </div>
+        <Emicalculator/>
+        </div>  </>
+        )}
 
         {/* ✅ Step 2: Customer Search */}
         {currentStep === 2 && <Staffloginpage2/>}
