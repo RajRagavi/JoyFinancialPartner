@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { ImUsers } from "react-icons/im";
-import Img1 from "../../assets/Images/Trust1.png"
-import Img2 from "../../assets/Images/Trust2.png"
-import Img3 from "../../assets/Images/Trust3.png"
-import Img4 from "../../assets/Images/Trust4.png"
+import Img1 from "../../assets/Images/Trust1.png";
+import Img2 from "../../assets/Images/Trust2.png";
+import Img3 from "../../assets/Images/Trust3.png";
+import Img4 from "../../assets/Images/Trust4.png";
 
 function Loan() {
- const [active, setActive] = useState(null);
+  const [active, setActive] = useState(null);
 
   const loantypes = [
     { name: "Vehicle Loans", icon: <ImUsers size={30} /> },
@@ -14,40 +14,44 @@ function Loan() {
     { name: "Personal Loans", icon: <ImUsers size={30} /> },
   ];
 
-  const Trust =[
-    {id:1, tittle:'Easy Apply', image:Img1},
-    {id:2, tittle:'Quick Process', image:Img2},
-    {id:3, tittle:'Lowest Interest Rates', image:Img3},
-    {id:4, tittle:'Minimal Documents', image:Img4},
-  ]
-
-
+  const Trust = [
+    { id: 1, tittle: "Easy Apply", image: Img1 },
+    { id: 2, tittle: "Quick Process", image: Img2 },
+    { id: 3, tittle: "Lowest Interest Rates", image: Img3 },
+    { id: 4, tittle: "Minimal Documents", image: Img4 },
+  ];
 
   return (
     <div>
       {/* Loan Types Section */}
       <div className="text-center px-4 md:px-10">
-        <h2 className="text-3xl md:text-4xl font-bold">
-        Why Choose us ?
-        </h2>
-        <p className="text-md text-gray-600 max-w-lg mx-auto">
-        All your need is to be a loved vehicle loans must be done with an your business is our priority
+        <h2 className="text-3xl md:text-4xl font-bold">Why Choose us ?</h2>
+        <p className="text-md text-gray-600 max-w-lg mx-auto mt-4">
+          All your need is to be a loved vehicle loans must be done with an your
+          business is our priority
         </p>
-        <div className='grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4
-                place-items-center gap-5 mt-10 mb-10'>
-          {Trust.map((data) =>(
-            <div key={data.id} className='space-y-3'>
-              <img src={data.image} alt="" 
-              className='w-[220px] h-[210px] object-cover rounded-sm'/>
+        <div
+          className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4
+                place-items-center gap-5 mt-10 mb-10"
+        >
+          {Trust.map((data) => (
+            <div key={data.id} className="space-y-3">
+              <img
+                src={data.image}
+                alt=""
+                className="w-[220px] h-[210px] object-cover rounded-sm"
+              />
               <div>
-                <h2 className='font-bold text-blue-950 text-xl'>{data.tittle}</h2>
+                <h2 className="font-bold text-blue-950 text-xl">
+                  {data.tittle}
+                </h2>
               </div>
             </div>
           ))}
         </div>
       </div>
 
-    {/*<div className="text-center py-16 px-4 md:px-10">
+      {/*<div className="text-center py-16 px-4 md:px-10">
       <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
         You can avail a <br />
         various loans with us
@@ -80,7 +84,7 @@ function Loan() {
       </div>
     </div>*/}
     </div>
-  )
+  );
 }
 
-export default Loan
+export default Loan;

@@ -27,7 +27,7 @@ function Client() {
     <div>
         
       {/* Client Reviews Section */}
-      <div className="text-center py-10 bg-gray-100">
+      <div className="text-center py-10 ">
         <h2 className="text-3xl font-bold">What Clients Say</h2>
         <p className="mt-3 text-gray-600 max-w-lg mx-auto">
           Problems trying to resolve the conflict between the two major realms
@@ -58,14 +58,7 @@ function Client() {
         </div>
       </div>
 
-      {/* Latest News Section */}
-      <div className="text-center py-10">
-        <h2 className="text-3xl font-bold">Latest News</h2>
-        <p className="mt-3 text-gray-600 max-w-lg mx-auto">
-          Problems trying to resolve the conflict between the two major realms
-          of Classical physics: Newtonian mechanics.
-        </p>
-      </div>
+      
 
     </div>
   )
