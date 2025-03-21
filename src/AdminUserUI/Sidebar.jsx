@@ -96,9 +96,11 @@ const Sidebar = () => {
                 <Link to="/kyc-vehicle" className="flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-500 transition">
                   <span>KYC</span>
                 </Link>
-                <Link to="/view_loan" className="flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-500 transition">
+                {userRole === "admin" && (  <Link to="/view_loan" className="flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-500 transition">
                   <span>View Loan</span>
                 </Link>
+
+)}
               </div>
             )}
           </div>

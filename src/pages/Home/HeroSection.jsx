@@ -7,9 +7,9 @@ import "swiper/css/pagination";
 import Mobile from "../../assets/Images/Mobile.png";
 import Vector from "../../assets/Images/Vector.png";
 import hero1 from "../../assets/Images/hero1.png";
-import hero2 from "../../assets/Images/hero2.png";
-import hero3 from "../../assets/Images/hero3.png";
-import Vector1 from "../../assets/Images/vector1.png";
+import hero2 from "../../assets/Images/finance.PNG";
+import hero3 from "../../assets/Images/Finance_management.PNG";
+import Vector1 from "../../assets/Images/VectorIcon.png";
 import Vector2 from "../../assets/Images/vector2.png";
 
 

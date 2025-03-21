@@ -6,44 +6,49 @@ import Staffloginpage2 from "./Staffloginpage2";
 import Staffloginpage3 from "./Staffloginpage3";
 import Emicalculator from "./Emicalculator";
 
+import { useReactToPrint } from "react-to-print";
+
 const StaffDashboard = () => {
   const [showTable, setShowTable] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const [loans, setLoans] = useState([]);
+  const [selectedLoan, setSelectedLoan] = useState(null); // 🔥 Selected Loan Data
+
   const steps = [
     { id: 1, label: "Common Search" },
     { id: 2, label: "Customer Search" },
     { id: 3, label: "Pay Bill Now" },
   ];
 
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-  } = useForm();
+  const { handleSubmit, register } = useForm();
 
   const fetchLoans = async (searchParams) => {
     try {
-      let loanQuery = [];
+      let queries = [];
       if (searchParams.loanId) {
-        loanQuery.push(where("id", "==", searchParams.loanId));
+        queries.push(where("LoanNo", "==", searchParams.loanId));
       }
       if (searchParams.phone) {
-        loanQuery.push(where("phone", "==", searchParams.phone));
+        queries.push(where("Mobile Number", "==", searchParams.phone));
       }
       if (searchParams.name) {
-        loanQuery.push(where("customerName", "==", searchParams.name));
+        queries.push(where("Customer Name", "==", searchParams.name));
       }
 
-      const vehicleLoanRef = query(collection(db, "vehicle_loans"), ...loanQuery);
-      const goldenLoanRef = query(collection(db, "golden_loan"), ...loanQuery);
-      
-      const vehicleLoansSnap = await getDocs(vehicleLoanRef);
-      const goldenLoansSnap = await getDocs(goldenLoanRef);
+      // 🔥 Vehicle Loans
+      const vehicleLoanRef = collection(db, "vehicle_loans");
+      const vehicleLoanQuery = queries.length > 0 ? query(vehicleLoanRef, ...queries) : vehicleLoanRef;
+      const vehicleLoansSnap = await getDocs(vehicleLoanQuery);
 
+      // 🔥 Gold Loans
+      const goldLoanRef = collection(db, "gold_loans");
+      const goldLoanQuery = queries.length > 0 ? query(goldLoanRef, ...queries) : goldLoanRef;
+      const goldLoansSnap = await getDocs(goldLoanQuery);
+
+      // ✅ Combine Data
       const allLoans = [
-        ...vehicleLoansSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() })),
-        ...goldenLoansSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() })),
+        ...vehicleLoansSnap.docs.map((doc) => ({ id: doc.id, type: "Vehicle Loan", ...doc.data() })),
+        ...goldLoansSnap.docs.map((doc) => ({ id: doc.id, type: "Gold Loan", ...doc.data() })),
       ];
 
       setLoans(allLoans);
@@ -73,9 +78,9 @@ const StaffDashboard = () => {
     }
   };
 
-  const finishProcess = () => {
-    alert("Process Completed Successfully!");
-  };
+  const handlePrint = useReactToPrint({
+    content: () => billRef.current,
+  });
 
   return (
     <div className="min-h-screen flex flex-col ml-64">
@@ -83,11 +88,8 @@ const StaffDashboard = () => {
 
       {/* Step 1: Common Search */}
       {currentStep === 1 && (
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-6"
-        >
-          <input {...register("loanId")} placeholder="Loan ID" className="border p-2 rounded" />
+        <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+          <input {...register("LoanNo")} placeholder="Loan ID" className="border p-2 rounded" />
           <input {...register("phone")} placeholder="Phone Number" className="border p-2 rounded" />
           <input {...register("name")} placeholder="Customer Name" className="border p-2 rounded" />
           <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">Search</button>
@@ -101,39 +103,51 @@ const StaffDashboard = () => {
           <table className="w-full border-collapse border border-gray-300">
             <thead>
               <tr className="bg-gray-100">
+                <th className="border p-2">Loan Type</th>
                 <th className="border p-2">Loan ID</th>
                 <th className="border p-2">Customer Name</th>
-                <th className="border p-2">Loan Amount</th>
-                <th className="border p-2">Pending</th>
+                <th className="border p-2">Mobile Number</th>
+                <th className="border p-2">Action</th>
               </tr>
             </thead>
             <tbody>
               {loans.map((loan) => (
                 <tr key={loan.id} className="text-center">
-                  <td className="border p-2">{loan.id}</td>
-                  <td className="border p-2">{loan.customerName}</td>
-                  <td className="border p-2">{loan.loanAmount}</td>
-                  <td className="border p-2">{loan.pendingAmount}</td>
+                  <td className="border p-2">{loan.type || "Vehicle Loan"}</td>
+                  <td className="border p-2">{loan.LoanNo}</td>
+                  <td className="border p-2">{loan["Customer Name"]}</td>
+                  <td className="border p-2">{loan["Mobile Number"]}</td>
+                  <td className="border p-2">
+                    <button className="bg-green-500 text-white px-3 py-1 rounded"
+                      onClick={() => { setSelectedLoan(loan); nextStep(); }}>
+                      Select
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
       )}
+     {/* EMI Calculator */}
+     {currentStep === 1 && <Emicalculator />}
+      {/* Step 2: Customer Search */}
+      {currentStep === 2 && <Staffloginpage2 loanData={selectedLoan} />}
 
-      {/* EMI Calculator */}
-      <Emicalculator />
-      
-      {/* Steps Navigation */}
-            {currentStep === 2 && <Staffloginpage2 />}
-            {currentStep === 3 && <Staffloginpage3 />}
-      
-            <div className="flex justify-end mt-6 space-x-3">
-              <button onClick={prevStep} className={`px-4 py-2 bg-blue-600 text-white rounded-lg ${currentStep === 1 ? "opacity-50 cursor-not-allowed" : ""}`} disabled={currentStep === 1}>Previous</button>
-              <button onClick={nextStep} className={`px-4 py-2 bg-blue-600 text-white rounded-lg ${currentStep === steps.length ? "opacity-50 cursor-not-allowed" : ""}`} disabled={currentStep === steps.length}>Next</button>
-              {currentStep === steps.length && <button onClick={finishProcess} className="px-4 py-2 bg-yellow-500 text-white rounded-lg">Save & Print</button>}
-            </div>
-          </div>
+      {/* Step 3: Pay Bill Now */}
+      {currentStep === 3 && <Staffloginpage3 loanData={selectedLoan} />}
+
+      {/* Navigation Buttons */}
+      <div className="flex justify-end mt-6 space-x-3">
+        <button onClick={prevStep} className={`px-4 py-2 bg-blue-600 text-white rounded-lg ${currentStep === 1 ? "opacity-50 cursor-not-allowed" : ""}`} disabled={currentStep === 1}>Previous</button>
+        {currentStep < steps.length && (
+          <button onClick={nextStep} className="px-4 py-2 bg-blue-600 text-white rounded-lg">Next</button>
+        )}
+        {currentStep === steps.length && (
+          <button onClick={handlePrint} className="px-4 py-2 bg-yellow-500 text-white rounded-lg">Save & Print</button>
+        )}
+      </div>
+    </div>
   );
 };
 

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ImUsers } from "react-icons/im";
-import Img1 from "../../assets/Images/Trust1.png"
-import Img2 from "../../assets/Images/Trust2.png"
+import Img1 from "../../assets/Images/Trust.png"
+import Img2 from "../../assets/Images/Finance_loan.png"
 import Img3 from "../../assets/Images/Trust3.png"
 import Img4 from "../../assets/Images/Trust4.png"
 
