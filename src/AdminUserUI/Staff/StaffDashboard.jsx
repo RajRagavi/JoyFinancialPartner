@@ -83,7 +83,7 @@ const StaffDashboard = () => {
   });
 
   return (
-    <div className="min-h-screen flex flex-col ml-64">
+    <div className="min-h-screen flex flex-col lg:ml-64 sm:mr-15 mt-10 ">
       <h1 className="text-2xl font-semibold px-4">{steps[currentStep - 1].label}</h1>
 
       {/* Step 1: Common Search */}
@@ -138,7 +138,7 @@ const StaffDashboard = () => {
       {currentStep === 3 && <Staffloginpage3 loanData={selectedLoan} />}
 
       {/* Navigation Buttons */}
-      <div className="flex justify-end mt-6 space-x-3">
+      <div className="flex justify-end mt-6 space-x-3 xs:mr-50">
         <button onClick={prevStep} className={`px-4 py-2 bg-blue-600 text-white rounded-lg ${currentStep === 1 ? "opacity-50 cursor-not-allowed" : ""}`} disabled={currentStep === 1}>Previous</button>
         {currentStep < steps.length && (
           <button onClick={nextStep} className="px-4 py-2 bg-blue-600 text-white rounded-lg">Next</button>

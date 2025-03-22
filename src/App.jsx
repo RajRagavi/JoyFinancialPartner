@@ -10,7 +10,7 @@ import Contact from "./pages/Contact";
 import Loans from "./pages/Loans";
 
 import Login from "./AdminUserUI/Login";
-import Signup from "./AdminUserUI/Signup";
+// import Signup from "./AdminUserUI/Signup";
 import Dashboard from "./AdminUserUI/Dashboard";
 import Loanprocess from "./AdminUserUI/Loanprocess";
 import Entry from "./AdminUserUI/Entry";
@@ -70,7 +70,7 @@ function MainApp({ user }) {
     "/loans",
     "/contact",
     "/login",
-    "/signup",
+    // "/signup",
   ];
 
   return (
@@ -89,7 +89,7 @@ function MainApp({ user }) {
           <Route path="/loans" element={<Loans />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
+          {/* <Route path="/signup" element={<Signup />} /> */}
 
 
             {/*Loanprocess submenu */}

@@ -10,7 +10,7 @@ function Kyc() {
       {/* Sidebar (assumed to be on the left) */}
       
       {/* Main Content */}
-      <div className="flex-1 p-6 bg-gray-200 ml-64 ">
+      <div className="flex-1 p-6 bg-gray-200 lg:ml-64 mt-10 ">
         {/* Button Container */}
         <div className="flex justify-between mb-6">
           <button

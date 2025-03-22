@@ -278,49 +278,57 @@ useEffect(() => {
 
   return (
     <div className="flex min-h-screen">
-        
-
-    {/* Main Content */}
-    <div className=" bg-gray-200 min-h-screen flex flex-col  mb-5">
-    <div className="flex items-center justify-between relative">
-          {steps.map((step, index) => (
+  {/* Main Content */}
+  <div className="bg-gray-200 min-h-screen flex flex-col mb-5 p-4">
+    
+    {/* Steps Navigation */}
+    <div className="flex flex-wrap items-center justify-center gap-4 sm:justify-between relative">
+      {steps.map((step, index) => (
+        <div key={step.id} className="relative flex-1 flex flex-col items-center font-semibold">
+          {index !== 0 && (
             <div
-              key={step.id}
-              className="relative flex-1 flex flex-col items-center font-semibold"
-            >
-              {index !== 0 && (
-                <div
-                  className={`absolute top-5 -left-1/2 w-full h-1 transition-all duration-300 ${
-                    currentStep >= step.id ? "bg-blue-500" : "bg-gray-300"
-                  }`}
-                ></div>
-              )}
-              <div
-                className={`relative z-10 w-10 h-10 flex items-center justify-center rounded-full text-white font-bold ${
-                  currentStep >= step.id ? "bg-blue-500" : "bg-gray-300"
-                }`}
-              >
-                {step.id}
-              </div>
-              <span className="text-sm mt-2 text-center">{step.label}</span>
-            </div>
-          ))}
+              className={`absolute top-5 -left-1/2 w-full h-1 transition-all duration-300 ${
+                currentStep >= step.id ? "bg-blue-500" : "bg-gray-300"
+              }`}
+            ></div>
+          )}
+          <div
+            className={`relative z-10 w-10 h-10 flex items-center justify-center rounded-full text-white font-bold ${
+              currentStep >= step.id ? "bg-blue-500" : "bg-gray-300"
+            }`}
+          >
+            {step.id}
+          </div>
+          <span className="text-sm mt-2 text-center">{step.label}</span>
         </div>
-        {currentStep === 1 && (
-      <form className="bg-white p-6 rounded-lg shadow-md mt-5" onSubmit={handleSubmit}>
+      ))}
+    </div>
+
+    {/* Step 1: Vehicle Loan Form */}
+    {currentStep === 1 && (
+      <form className="bg-white p-6 rounded-lg shadow-md mt-5 w-full max-w-3xl mx-auto" onSubmit={handleSubmit}>
         <h2 className="text-xl font-semibold mb-4">Vehicle Loan Form</h2>
-        <div className="grid grid-cols-3 gap-4">
+
+        {/* Personal Details */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {formFields.map((field) => (
             <div key={field.label}>
               <label className="block font-medium">{field.label} *</label>
-              <input type={field.type} name={field.label} value={formData[field.label] || ""} onChange={handleInputChange} className="border p-2 w-full rounded-md" />
+              <input
+                type={field.type}
+                name={field.label}
+                value={formData[field.label] || ""}
+                onChange={handleInputChange}
+                className="border p-2 w-full rounded-md"
+              />
               {errors[field.label] && <p className="text-red-500 text-sm">{errors[field.label]}</p>}
             </div>
           ))}
         </div>
-         {/* Address Fields */}
-         <h2 className="text-lg font-medium mt-6">Address</h2>
-        <div className="grid grid-cols-3 gap-4">
+
+        {/* Address Fields */}
+        <h2 className="text-lg font-medium mt-6">Address</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {addressFields.map((field) => (
             <div key={field.label}>
               <label className="block font-medium">{field.label}</label>
@@ -332,12 +340,14 @@ useEffect(() => {
                 placeholder={field.placeholder}
                 className="border p-2 w-full rounded-md"
               />
-                 {errors[field.label] && <p className="text-red-500 text-sm">{errors[field.label]}</p>}
+              {errors[field.label] && <p className="text-red-500 text-sm">{errors[field.label]}</p>}
             </div>
           ))}
         </div>
+
+        {/* KYC Documents Upload */}
         <h2 className="text-lg font-medium mt-6">KYC Documents Upload</h2>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {fileFields.map((field) => (
             <div key={field.label}>
               <label className="block font-medium">{field.label} *</label>
@@ -346,60 +356,48 @@ useEffect(() => {
             </div>
           ))}
         </div>
-          {/* Verification Checkboxes */}
-          <h2 className="text-lg font-medium mt-6">Verification</h2>
-                    <div className="grid grid-cols-3 gap-4">
-                        {verificationOptions.map((option) => (
-                            <label key={option} className="flex items-center space-x-2">
-                                <input type="checkbox" name={option} onChange={(e) => handleCheckboxChange(e, "verification")} className="w-4 h-4" />
-                                <span>{option}</span>
-                            </label>
-                        ))}
-                 
-                    </div>
-                    </form>
-                  )}
-          {currentStep === 2 && <VehiclePage2 formData={formData} setFormData={setFormData} />}
-          {currentStep === 3 && <VehiclePage3 formData={formData} setFormData={setFormData} />}
 
-           {/* Previous & Next Buttons finish button */}
- <div className="flex justify-end mt-6 space-x-3">
-          <button
-            onClick={prevStep}
-            className={`px-4 py-2 bg-blue-600 text-white rounded-lg ${
-              currentStep === 1 ? "opacity-50 cursor-not-allowed" : ""
-            }`}
-            disabled={currentStep === 1}
-          >
-            Previous
-          </button>
-          <button
-            onClick={nextStep}
-            className={`px-4 py-2 bg-blue-600 text-white rounded-lg ${
-              currentStep === steps.length
-                ? "opacity-50 cursor-not-allowed"
-                : ""
-            }`}
-            disabled={currentStep === steps.length}
-          >
-            Next
-          </button>
-          {/* Finish Button */}
-          {currentStep === steps.length - 0 && (
-            <button
-              onClick={finishProcess}
-              className="px-4 py-2 bg-blue-900 text-white rounded-lg"
-            >
-              Finish
-            </button>
-          )}
+        {/* Verification Checkboxes */}
+        <h2 className="text-lg font-medium mt-6">Verification</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          {verificationOptions.map((option) => (
+            <label key={option} className="flex items-center space-x-2">
+              <input type="checkbox" name={option} onChange={(e) => handleCheckboxChange(e, "verification")} className="w-4 h-4" />
+              <span>{option}</span>
+            </label>
+          ))}
         </div>
-        </div>
+      </form>
+    )}
 
+    {currentStep === 2 && <VehiclePage2 formData={formData} setFormData={setFormData} />}
+    {currentStep === 3 && <VehiclePage3 formData={formData} setFormData={setFormData} />}
 
-                  
-   
+    {/* Previous & Next Buttons */}
+    <div className="flex flex-wrap justify-center sm:justify-end mt-6 space-x-3">
+      <button
+        onClick={prevStep}
+        className={`px-4 py-2 bg-blue-600 text-white rounded-lg ${currentStep === 1 ? "opacity-50 cursor-not-allowed" : ""}`}
+        disabled={currentStep === 1}
+      >
+        Previous
+      </button>
+      <button
+        onClick={nextStep}
+        className={`px-4 py-2 bg-blue-600 text-white rounded-lg ${currentStep === steps.length ? "opacity-50 cursor-not-allowed" : ""}`}
+        disabled={currentStep === steps.length}
+      >
+        Next
+      </button>
+      {currentStep === steps.length - 0 && (
+        <button onClick={finishProcess} className="px-4 py-2 bg-blue-900 text-white rounded-lg">
+          Finish
+        </button>
+      )}
     </div>
+  </div>
+</div>
+
 
   );
 };

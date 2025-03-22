@@ -193,8 +193,8 @@ const handleInputChange = (e) => {
           <div className="col-span-full">
             {/* Address Fields */}
          <h2 className="text-lg font-medium mt-6">Address</h2>
-        <div className="grid grid-cols-3 gap-4">
-          {addressFields.map((field) => (
+         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+         {addressFields.map((field) => (
             <div key={field.label}>
               <label className="block font-medium">{field.label}</label>
               <input

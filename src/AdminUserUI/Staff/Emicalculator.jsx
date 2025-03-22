@@ -36,7 +36,7 @@ const Emicalculator = () => {
   ];
 
   return (
-    <div className="mt-10 ">
+    <div className="mt-10 sm:mr-40 ">
       <h2 className="text-2xl font-bold">EMI Calculator</h2>
 
       {/* Side-by-Side Layout */}

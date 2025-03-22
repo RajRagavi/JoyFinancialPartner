@@ -105,12 +105,12 @@ const Signup = () => {
           </div>
 
           {/* Signup Button */}
-          <button
+          {/* <button
             type="submit"
             className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-400 transition"
           >
             Sign Up
-          </button>
+          </button> */}
         </form>
 
         {/* Already have an account? */}
