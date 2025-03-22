@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ImUsers } from "react-icons/im";
+import { FaCar, FaCoins, FaBriefcase } from "react-icons/fa";
 import Img1 from "../../assets/Images/Trust.png"
 import Img2 from "../../assets/Images/Finance_loan.png"
 import Img3 from "../../assets/Images/Trust3.png"
@@ -8,11 +8,12 @@ import Img4 from "../../assets/Images/Trust4.png"
 function Loan() {
  const [active, setActive] = useState(null);
 
-  const loantypes = [
-    { name: "Vehicle Loans", icon: <ImUsers size={30} /> },
-    { name: "Business Loans", icon: <ImUsers size={30} /> },
-    { name: "Personal Loans", icon: <ImUsers size={30} /> },
-  ];
+ const loantypes = [
+  { name: "Vehicle Loans", icon: <FaCar size={30} className="text-blue-600" /> },  // 🚗 Blue for Vehicle Loans
+  { name: "Gold Loans", icon: <FaCoins size={30} className="text-yellow-500" /> }, // 🪙 Gold for Gold Loans
+  { name: "Business Loans", icon: <FaBriefcase size={30} className="text-green-600" /> }, // 🏢 Green for Business Loans
+];
+
 
   const Trust =[
     {id:1, tittle:'Easy Apply', image:Img1},
@@ -47,13 +48,15 @@ function Loan() {
         </div>
       </div>
 
-    {/*<div className="text-center py-16 px-4 md:px-10">
+    <div className="text-center py-16 px-4 md:px-10">
       <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-        You can avail a <br />
-        various loans with us
+      Our Featured Loans
       </h2>
       <p className="mt-3 text-gray-600 max-w-lg mx-auto">
-        All you need is a loved vehicle loan. Your business is our priority.
+      Explore our top loan options with low interest rates, flexible
+                    repayment plans, and quick approvals. Whether it's a Vehicle, Gold
+                    or Business loan, we have the perfect solution to meet your financial
+                    needs!
       </p>
     
       <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
@@ -78,7 +81,7 @@ function Loan() {
           </button>
         ))}
       </div>
-    </div>*/}
+    </div>
     </div>
   )
 }

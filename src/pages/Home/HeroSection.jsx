@@ -14,7 +14,7 @@ import Vector2 from "../../assets/Images/vector2.png";
 const HeroSection = () => {
   return (
     <div className="relative flex flex-col md:flex-row items-center justify-between 
-    min-h-screen px-4 sm:px-6 md:px-20 overflow-hidden bg-white">
+    min-h-screen px-4 sm:px-6 md:px-20 overflow-hidden bg-white mt-10">
       
       {/* Swiper Slider */}
       <div className="w-full max-w-full">
@@ -39,7 +39,7 @@ const HeroSection = () => {
                 </p>
                 <div className="mt-6 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
                   <button className="w-full sm:w-auto border-2 border-blue-500 text-blue-500 hover:text-white px-6 py-3 rounded-full shadow-lg hover:bg-blue-600 transition">
-                    Apply Now
+                    Contact Us
                   </button>
                 </div>
                 <p className="mt-4 text-blue-500 font-semibold">

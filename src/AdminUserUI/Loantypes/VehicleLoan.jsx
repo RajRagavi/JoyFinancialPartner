@@ -14,11 +14,11 @@ import VehiclePage3 from "./VehiclePage3";
 const formFields = [
   
   { label: "Loan No", type:  "text", required: true },
-  { label: "GEO CODE", type:  "text", required: true },
   { label: "Customer Name", type:  "text", required: true },
   { label: "Date of Birth", type: "date",  },
   { label: "Father Name", type:  "text", required: true },
-  { label: "Vehicle Number", type: "number",  },
+  { label: "Mobile Number", type: "number",  },
+  { label: "Vehicle Number", type: "text",  },
   { label: "Vehicle Value", type:  "text", required: true },
   { label: "Vehicle Type", type:  "text", required: true },
   { label: "Vehicle Make", type:  "text", required: true },
@@ -26,18 +26,14 @@ const formFields = [
   { label: "Engine Number", type:  "text", required: true },
   { label: "Borrower Name", type:  "text", required: true },
   { label: "Monthly Income", type: "number",  },
-  { label: "Mobile Number", type: "number",  },
+  { label: "Occupation", type:  "text", required: true },
   { label: "Alternate Number", type: "number",  },
   { label: "CoBorrower Name", type:  "text", required: true },
   { label: "CoBorrower Phone", type: "number",  },
-  { label: "Occupation", type:  "text", required: true },
-  { label: "Loan Required", type: "number",  },
-  { label: "Other EMI", type: "number", required: false },
   { label: "Tenure", type:  "text", required: true },
   { label: "Amount", type: "number",  },
-  { label: "Months", type: "number",  },
   { label: "Interest (%)", type: "number",  },
-  { label: "Chassis Number", type: "number",  },
+  { label: "Chassis Number", type: "text",  },
   { label: "Date", type: "date",  }
 ];
 
@@ -76,7 +72,6 @@ const addressFields = [
     { label: "State", type:  "text", required: true  ,placeholder: "Enter State",  },
     { label: "Country", type:  "text", required: true  ,placeholder: "Enter Country",  },
     { label: "Pincode", type:  "text", required: true  ,placeholder: "Enter Pincode",  },
-    { label: "Landmark", type:  "text", required: true  ,placeholder: "Enter Nearby Landmark (Optional)",  },
 ];
 
   

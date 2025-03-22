@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { auth, db } from "../Firebase/firebaseConfig"; // Firebase setup
-import { signOut } from "firebase/auth";
+import { auth, db } from "../Firebase/firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
-
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import Logo from "../assets/Images/Logo.png";
 import { 
-  FaTachometerAlt, FaSync, FaFileAlt, FaList, FaChartBar, FaPrint, FaSignOutAlt, 
+  FaTachometerAlt, FaSync, FaFileAlt, FaList, FaSignOutAlt, 
   FaSearch, FaBars, FaTimes, FaChevronDown, FaUsers 
 } from "react-icons/fa";
 
@@ -14,28 +13,35 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [openLoanProcess, setOpenLoanProcess] = useState(false);
-  const [openStaff, setOpenStaff] = useState(false); 
-  const [userRole, setUserRole] = useState(null); // Store user role
+  const [openStaff, setOpenStaff] = useState(false);
+  const [userRole, setUserRole] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // Fetch user role from Firestore
   useEffect(() => {
-    const fetchUserRole = async () => {
-      const user = auth.currentUser;
+    const fetchUserRole = async (user) => {
       if (user) {
         const userRef = doc(db, "users", user.uid);
         const userSnap = await getDoc(userRef);
         if (userSnap.exists()) {
-          setUserRole(userSnap.data().role); // Assume role is stored in Firestore
+          setUserRole(userSnap.data().role);
         }
+      } else {
+        setUserRole(null); // If no user, reset role
       }
+      setLoading(false);
     };
-    fetchUserRole();
+
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      fetchUserRole(user);
+    });
+
+    return () => unsubscribe(); // Cleanup listener on unmount
   }, []);
 
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      navigate("/login"); // Redirect to login after logout
+      navigate("/login");
     } catch (error) {
       console.error("Logout Failed:", error.message);
     }
@@ -43,7 +49,7 @@ const Sidebar = () => {
 
   return (
     <>
-      {/* Hamburger Menu Button - Mobile */}
+      {/* Hamburger Menu Button */}
       <button
         className="lg:hidden fixed top-4 left-4 z-60 bg-[#082b64] p-2 rounded-md text-white"
         onClick={() => setIsOpen(!isOpen)}
@@ -59,17 +65,10 @@ const Sidebar = () => {
       >
         {/* Logo */}
         <div className="flex justify-center py-4 bg-gradient-to-r from-blue-700 to-gray-800 shadow-md">
-  <div className="bg-white p-2 rounded-lg"> {/* White background & padding */}
-    <img
-      src={Logo} // ✅ Change this to your actual logo path
-      alt="Joy Financial Logo"
-      className="h-16 w-auto" // ✅ Adjust height if needed
-    />
-  </div>
-</div>
-
-
-
+          <div className="bg-white p-2 rounded-lg">
+            <img src={Logo} alt="Joy Financial Logo" className="h-16 w-auto" />
+          </div>
+        </div>
 
         {/* Search Bar */}
         <div className="px-4 py-2">
@@ -107,17 +106,17 @@ const Sidebar = () => {
                 <Link to="/kyc-vehicle" className="flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-500 transition">
                   <span>KYC</span>
                 </Link>
-                {userRole === "admin" && (  <Link to="/view_loan" className="flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-500 transition">
-                  <span>View Loan</span>
-                </Link>
-
-)}
+                {!loading && userRole === "admin" && (
+                  <Link to="/view_loan" className="flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-500 transition">
+                    <span>View Loan</span>
+                  </Link>
+                )}
               </div>
             )}
           </div>
 
-          {/* Show Staff Management ONLY if user is admin */}
-          {userRole === "admin" && (
+          {/* ✅ Only Show Staff Management if userRole is "admin" */}
+          {!loading && userRole === "admin" && (
             <div>
               <button
                 onClick={() => setOpenStaff(!openStaff)}
@@ -131,12 +130,6 @@ const Sidebar = () => {
               </button>
               {openStaff && (
                 <div className="ml-6 mt-2 space-y-2">
-                  {/* <Link to="/staff/manage" className="flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-500 transition">
-                    <span>Manage Staff</span>
-                  </Link>
-                  <Link to="/staff/view" className="flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-500 transition">
-                    <span>View Staff</span>
-                  </Link> */}
                   <Link to="/staff/add" className="flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-500 transition">
                     <span>Add Staff</span>
                   </Link>
@@ -153,14 +146,6 @@ const Sidebar = () => {
             <FaList />
             <span>Pending Lists</span>
           </Link>
-          {/* <Link to="/accounts" className="flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-500 transition">
-            <FaChartBar />
-            <span>Accounts</span>
-          </Link>
-          <Link to="/notice-prints" className="flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-500 transition">
-            <FaPrint />
-            <span>Notice & Prints</span>
-          </Link> */}
         </nav>
 
         {/* Logout */}

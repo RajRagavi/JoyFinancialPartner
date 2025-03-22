@@ -37,7 +37,6 @@ const GoldLoan = () => {
     state: "",
     country: "",
     pincode: "",
-    landmark: "",
 });
 
   const [errors, setErrors] = useState({});
