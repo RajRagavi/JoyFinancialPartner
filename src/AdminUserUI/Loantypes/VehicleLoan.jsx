@@ -15,18 +15,18 @@ const formFields = [
   
   { label: "Loan No", type:  "text", required: true },
   { label: "Customer Name", type:  "text", required: true },
+  { label: "Monthly Income", type: "number",  },
+  { label: "Occupation", type: "select",  },
   { label: "Date of Birth", type: "date",  },
-  { label: "Father Name", type:  "text", required: true },
+  { label: "Father Name", type:  "text",  },
   { label: "Mobile Number", type: "number",  },
   { label: "Vehicle Number", type: "text",  },
   { label: "Vehicle Value", type:  "text", required: true },
-  { label: "Vehicle Type", type:  "text", required: true },
-  { label: "Vehicle Make", type:  "text", required: true },
+  { label: "Vehicle Type", type:  "text",  },
+  { label: "Vehicle Make", type:  "text", },
   { label: "Vehicle Model & Year", type:  "text", required: true },
   { label: "Engine Number", type:  "text", required: true },
   { label: "Borrower Name", type:  "text", required: true },
-  { label: "Monthly Income", type: "number",  },
-  { label: "Occupation", type:  "text", required: true },
   { label: "Alternate Number", type: "number",  },
   { label: "CoBorrower Name", type:  "text", required: true },
   { label: "CoBorrower Phone", type: "number",  },
@@ -36,17 +36,23 @@ const formFields = [
   { label: "Chassis Number", type: "text",  },
   { label: "Date", type: "date",  }
 ];
-
+const occupationOptions = [
+  "Salaried",
+  "Self Employed",
+  "Government Employee",
+  "Private Sector Employee",
+  "Home-Maker",
+  "Retired",
+];
 const fileFields = [
-  { label: "Aadhar Front & Back Side Photo", },
+  { label: "Aadhar Front", },
+  { label: "Aadhar Back", },
   { label: "Pan Photo",},
+  { label: "RC Original",},
   { label: "Licence Photo" ,},
-  { label: "Bike Live Photos",},
-  { label: "Vehicle Photo Upload", },
-  { label: "RC Image",},
-  { label: "Borrower Image", },
   { label: "Vehicle Front",},
-  { label: "Vehicle Back" ,}
+  { label: "Vehicle Back", },
+  { label: "Customer House", }
 ];
 
 const verificationOptions = [
@@ -55,23 +61,24 @@ const verificationOptions = [
   "Aadhar Xerox",
   "Original RC",
   "Ration Xerox",
-  "NOC",
-  "Ready Cash",
   "Received and checked KYC Documents for both Borrower and Guarantor?",
   "Borrower House Verified",
   "Vehicle Documents Verified?",
 ];
+
+const radioOptions = ["NOC", "Ready Cash"];
+
 const addressFields = [
 
-    { label: "House Own/Rent*", type:  "text", required: true  ,placeholder: "House Own/Rent*",  },
-    { label: "Door / Flat Number", type:  "text", required: true  ,placeholder: "Enter Door / Flat Number",  },
-    { label: "Street / Lane", type:  "text", required: true  ,placeholder: "Enter Street / Lane",  },
-    { label: "Area / Society Name", type:  "text", required: true  ,placeholder: "Enter Area / Society Name",  },
-    { label: "City / Village", type:  "text", required: true  ,placeholder: "Enter City / Village",  },
-    { label: "District", type:  "text", required: true  ,placeholder: "Enter District",  },
-    { label: "State", type:  "text", required: true  ,placeholder: "Enter State",  },
-    { label: "Country", type:  "text", required: true  ,placeholder: "Enter Country",  },
-    { label: "Pincode", type:  "text", required: true  ,placeholder: "Enter Pincode",  },
+    { label: "House Own/Rent*", type:  "text", placeholder: "House Own/Rent*",  },
+    { label: "Door / Flat Number", type:  "text", placeholder: "Enter Door / Flat Number",  },
+    { label: "Street / Lane", type:  "text", placeholder: "Enter Street / Lane",  },
+    { label: "Area / Society Name", type:  "text", placeholder: "Enter Area / Society Name",  },
+    { label: "City / Village", type:  "text", placeholder: "Enter City / Village",  },
+    { label: "District", type:  "text", placeholder: "Enter District",  },
+    { label: "State", type:  "text", placeholder: "Enter State",  },
+    { label: "Country", type:  "text", placeholder: "Enter Country",  },
+    { label: "Pincode", type:  "text", placeholder: "Enter Pincode",  },
 ];
 
   
@@ -304,40 +311,74 @@ useEffect(() => {
       <form className="bg-white p-6 rounded-lg shadow-md mt-5 w-full max-w-3xl mx-auto" onSubmit={handleSubmit}>
         <h2 className="text-xl font-semibold mb-4">Vehicle Loan Form</h2>
 
-        {/* Personal Details */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {formFields.map((field) => (
-            <div key={field.label}>
-              <label className="block font-medium">{field.label} *</label>
-              <input
-                type={field.type}
-                name={field.label}
-                value={formData[field.label] || ""}
-                onChange={handleInputChange}
-                className="border p-2 w-full rounded-md"
-              />
-              {errors[field.label] && <p className="text-red-500 text-sm">{errors[field.label]}</p>}
-            </div>
+      {/* 🔹 Personal Details Section */}
+<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+  {formFields.map((field) => (
+    <div key={field.label}>
+      <label className="block font-medium">{field.label} *</label>
+      {field.type === "select" ? (
+        <select
+          name={field.label}
+          value={formData[field.label] || ""}
+          onChange={handleInputChange}
+          className="border p-2 w-full rounded-md"
+        >
+          <option value="">Select Occupation</option>
+          {occupationOptions.map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
           ))}
-        </div>
+        </select>
+      ) : (
+        <input
+          type={field.type}
+          name={field.label}
+          value={formData[field.label] || ""}
+          onChange={handleInputChange}
+          className="border p-2 w-full rounded-md"
+        />
+      )}
+      {errors[field.label] && <p className="text-red-500 text-sm">{errors[field.label]}</p>}
+    </div>
+  ))}
+</div>
 
         {/* Address Fields */}
         <h2 className="text-lg font-medium mt-6">Address</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {addressFields.map((field) => (
-            <div key={field.label}>
-              <label className="block font-medium">{field.label}</label>
-              <input
-                type={field.type}
-                name={field.label}
-                value={formData[field.label] || ""}
-                onChange={handleInputChange}
-                placeholder={field.placeholder}
-                className="border p-2 w-full rounded-md"
-              />
-              {errors[field.label] && <p className="text-red-500 text-sm">{errors[field.label]}</p>}
-            </div>
-          ))}
+        {addressFields.map((field) => (
+  <div key={field.label}>
+    <label className="block font-medium">{field.label}</label>
+
+    {/* 🔹 Dropdown for House Own/Rent */}
+    {field.label === "House Own/Rent*" ? (
+      <select
+        name={field.label}
+        value={formData[field.label] || ""}
+        onChange={handleInputChange}
+        className="border p-2 w-full rounded-md"
+      >
+        <option value="" disabled>Select</option>
+        <option value="Own">Own</option>
+        <option value="Rent">Rent</option>
+      </select>
+      
+
+    ) : (
+      <input
+        type={field.type}
+        name={field.label}
+        value={formData[field.label] || ""}
+        onChange={handleInputChange}
+        placeholder={field.placeholder}
+        className="border p-2 w-full rounded-md"
+      />
+    )}
+
+    {errors[field.label] && <p className="text-red-500 text-sm">{errors[field.label]}</p>}
+  </div>
+))}
         </div>
 
         {/* KYC Documents Upload */}
@@ -352,16 +393,41 @@ useEffect(() => {
           ))}
         </div>
 
-        {/* Verification Checkboxes */}
-        <h2 className="text-lg font-medium mt-6">Verification</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {verificationOptions.map((option) => (
-            <label key={option} className="flex items-center space-x-2">
-              <input type="checkbox" name={option} onChange={(e) => handleCheckboxChange(e, "verification")} className="w-4 h-4" />
-              <span>{option}</span>
-            </label>
-          ))}
-        </div>
+       {/* 🔹 Verification Section */}
+<h2 className="text-lg font-medium mt-6">Verification</h2>
+
+{/* 🔹 Checkboxes for other options */}
+<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+  {verificationOptions.map((option) => (
+    <label key={option} className="flex items-center space-x-2">
+      <input
+        type="checkbox"
+        name={option}
+        onChange={(e) => handleCheckboxChange(e, "verification")}
+        className="w-4 h-4"
+      />
+      <span>{option}</span>
+    </label>
+  ))}
+</div>
+
+{/* 🔹 Radio Buttons for "NOC" & "Ready Cash" */}
+<h2 className="text-lg font-medium mt-6">Finance Type</h2>
+<div className="flex gap-4">
+  {radioOptions.map((option) => (
+    <label key={option} className="flex items-center space-x-2">
+      <input
+        type="radio"
+        name="verificationType"
+        value={option}
+        checked={formData.verificationType === option}
+        onChange={handleInputChange}
+        className="w-4 h-4"
+      />
+      <span>{option}</span>
+    </label>
+  ))}
+</div>
       </form>
     )}
 

@@ -1,9 +1,7 @@
 import React, { useState } from "react";
-import { FaCloudUploadAlt } from "react-icons/fa";
-import { db } from "../../Firebase/firebaseConfig"
-import { getFirestore, collection, addDoc } from "firebase/firestore";
+import { db } from "../../Firebase/firebaseConfig";
+import { collection, addDoc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
-
 
 const auth = getAuth();
 
@@ -18,17 +16,12 @@ const GoldLoan = () => {
     goldRateToday: "",
     coBorrowerPhone: "",
     requiredLoanAmount: "",
-    phoneNumber: "",
     monthlyIncome: "",
     rateOfInterest: "",
     totalGoldWeight: "",
     goldWeightAfterWastage: "",
     tenure: "",
-    city: "",
-    kycDocuments: [],
-    goldVerified: false,
-    vehicleDocumentsVerified: false,
-    houseOwnRent: "",  // Address fields added
+    houseOwnRent: "",
     doorFlatNumber: "",
     streetLane: "",
     areaSocietyName: "",
@@ -37,80 +30,66 @@ const GoldLoan = () => {
     state: "",
     country: "",
     pincode: "",
-});
+    kycDocuments: [],
+    goldVerified: false,
+    vehicleDocumentsVerified: false,
+  });
 
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-  const [successMessage, setSuccessMessage] = useState("");
 
   const formFields = [
-    { label: "borrowerName", type: "text", required: true },
-    { label: "personalNumber", type: "number", required: true },
-    { label: "fatherName", type: "text", required: false },
-    { label: "date", type: "date", required: true },
-    { label: "alternateNumber", type: "number", required: true },
-    { label: "coBorrowerName", type: "text", required: false },
-    { label: "goldRateToday", type: "number" },
-    { label: "coBorrowerPhone", type: "number", required: false },
-    { label: "requiredLoanAmount", type: "number", required: true },
-    { label: "phoneNumber", type: "number", required: true },
-    { label: "monthlyIncome", type: "number", required: true },
-    { label: "rateOfInterest", type: "number", required: true },
-    { label: "totalGoldWeight", type: "number", required: true },
-    { label: "goldWeightAfterWastage", type: "number", required: true },
-    { label: "tenure", type: "number", required: false },
-];
-
+    { name: "borrowerName", label: "Borrower Name", type: "text", required: true },
+    { name: "personalNumber", label: "Personal Number", type: "number", required: true },
+    { name: "fatherName", label: "Father's Name", type: "text", required: false },
+    { name: "date", label: "Date", type: "date", required: true },
+    { name: "alternateNumber", label: "Alternate Number", type: "number", required: true },
+    { name: "coBorrowerName", label: "Co-Borrower Name", type: "text", required: false },
+    { name: "goldRateToday", label: "Gold Rate Today", type: "number" },
+    { name: "coBorrowerPhone", label: "Co-Borrower Phone", type: "number", required: false },
+    { name: "requiredLoanAmount", label: "Required Loan Amount", type: "number", required: true },
+    { name: "monthlyIncome", label: "Monthly Income", type: "number", required: true },
+    { name: "rateOfInterest", label: "Rate of Interest", type: "number", required: true },
+    { name: "totalGoldWeight", label: "Total Gold Weight", type: "number", required: true },
+    { name: "goldWeightAfterWastage", label: "Gold Weight After Wastage", type: "number", required: true },
+    { name: "tenure", label: "Tenure", type: "number", required: false },
+  ];
 
   const addressFields = [
+    { name: "houseOwnRent", label: "House Own/Rent", type: "dropdown", required: true },
+    { name: "doorFlatNumber", label: "Door / Flat Number", type: "text", required: true },
+    { name: "streetLane", label: "Street / Lane", type: "text", required: true },
+    { name: "areaSocietyName", label: "Area / Society Name", type: "text", required: true },
+    { name: "cityVillage", label: "City / Village", type: "text", required: true },
+    { name: "district", label: "District", type: "text", required: true },
+    { name: "state", label: "State", type: "text", required: true },
+    { name: "country", label: "Country", type: "text", required: true },
+    { name: "pincode", label: "Pincode", type: "text", required: true },
+  ];
 
-    { name:"House",label: "House Own/Rent", type: "text", placeholder: "House Own/Rent", required: true  },
-   
-      { name: "doorNumber", label: "Door / Flat Number", type: "text", placeholder: "Enter Door / Flat Number", required: true },
-      { name: "street", label: "Street / Lane", type: "text", placeholder: "Enter Street / Lane", required: true },
-      { name: "area", label: "Area / Society Name", type: "text", placeholder: "Enter Area / Society Name", required: true },
-      { name: "city", label: "City / Village", type: "text", placeholder: "Enter City / Village", required: true },
-    
-    { name: "District", label: "District", type: "text", placeholder: "Enter District", required: true  },
-    { name:"State", label: "State", type: "text", placeholder: "Enter State", required: true  },
-    { name:"Country", label: "Country", type: "text", placeholder: "Enter Country", required: true  },
-    { name:"Pincode", label: "Pincode", type: "text", placeholder: "Enter Pincode", required: true  },
-    { name:"Landmark", label: "Landmark", type: "text", placeholder: "Enter Nearby Landmark (Optional)", required: true  },
-];
-const validateForm = () => {
-  let newErrors = {};
-  
-  formFields.forEach((field) => {
-    if (field.required && !formData[field.label]) {
-      newErrors[field.label] = `${field.label} is required`;
-    }
-  });
+  const validateForm = () => {
+    let newErrors = {};
+    [...formFields, ...addressFields].forEach((field) => {
+      if (field.required && !formData[field.name]) {
+        newErrors[field.name] = `${field.label} is required`;
+      }
+    });
 
-  addressFields.forEach((field) => {
-    if (field.required && !formData[field.label]) {
-      newErrors[field.label] = `${field.label} is required`;
-    }
-  });
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
-  setErrors(newErrors);
-  return Object.keys(newErrors).length === 0;
-};
-
-
-const handleInputChange = (e) => {
-  const { name, value } = e.target;
-  setFormData((prev) => ({ ...prev, [name.replace(/\s+/g, '')]: value }));
-};
-
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleCheckboxChange = (e) => {
-    const { name, checked } = e.target;
+    const { name, checked, value } = e.target;
     if (name === "kycDocuments") {
       setFormData((prev) => ({
         ...prev,
-        kycDocuments: checked
-          ? [...prev.kycDocuments, e.target.value]
-          : prev.kycDocuments.filter((doc) => doc !== e.target.value),
+        kycDocuments: checked ? [...prev.kycDocuments, value] : prev.kycDocuments.filter((doc) => doc !== value),
       }));
     } else {
       setFormData((prev) => ({ ...prev, [name]: checked }));
@@ -119,118 +98,68 @@ const handleInputChange = (e) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    if (!validateForm()) {
-      console.error("Form validation failed");
-      alert("Please fill in all required fields.");
-      return;
-    }
-  
+    if (!validateForm()) return alert("Please fill in all required fields.");
+
     const user = auth.currentUser;
-    if (!user) {
-      console.error("Error: User not logged in!");
-      alert("You must be logged in to submit the loan application.");
-      return;
-    }
-  
+    if (!user) return alert("You must be logged in to submit the loan application.");
+
     try {
-      await addDoc(collection(db, "gold_loans"), {
-        borrowerName: formData.borrowerName,
-        personalNumber: formData.personalNumber,
-        fatherName: formData.fatherName,
-        date: formData.date,
-        alternateNumber: formData.alternateNumber,
-        coBorrowerName: formData.coBorrowerName,
-        goldRateToday: formData.goldRateToday,
-        coBorrowerPhone: formData.coBorrowerPhone,
-        requiredLoanAmount: formData.requiredLoanAmount, // Fix: Corrected variable
-        phoneNumber: formData.phoneNumber,
-        monthlyIncome: formData.monthlyIncome,
-        rateOfInterest: formData.rateOfInterest,
-        totalGoldWeight: formData.totalGoldWeight,
-        goldWeightAfterWastage: formData.goldWeightAfterWastage,
-        tenure: formData.tenure,
-        city: formData.city,
-        address: formData.address,
-        pinCode: formData.pinCode,
-        landMark: formData.landMark,
-        kycDocuments: formData.kycDocuments,
-        goldVerified: formData.goldVerified,
-        vehicleDocumentsVerified: formData.vehicleDocumentsVerified,
-        createdBy: user.uid, // Store user ID for verification
-        timestamp: new Date(),
-      });
-  
-      console.log("Loan application saved successfully!");
+      setLoading(true);
+      await addDoc(collection(db, "gold_loans"), { ...formData, createdBy: user.uid, timestamp: new Date() });
       alert("Loan application submitted successfully!");
+      setFormData({}); // Reset form
     } catch (error) {
       console.error("Error saving loan application:", error.message);
+    } finally {
+      setLoading(false);
     }
   };
-  
 
   return (
     <div className="bg-gray-200 min-h-screen flex flex-col items-center p-6">
       <div className="bg-white shadow-lg p-6 rounded-lg w-full max-w-5xl">
         <h2 className="text-xl font-semibold text-gray-800 mb-4">Gold Loan Form</h2>
-        {successMessage && <p className="text-green-600">{successMessage}</p>}
+
         <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {formFields.map((field) => (
-            <div className="flex flex-col" key={field.label}>
-              <label className="text-gray-700 text-sm font-medium">{field.label.replace(/([A-Z])/g, ' $1').trim()} *</label>
-              <input
-                type="text"
-                name={field.label}
-                value={formData[field.label]}
-                onChange={handleInputChange}
-                className="border rounded p-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-400"
-              />
-              {errors[field.label] && <span className="text-red-500 text-sm">{errors[field.label]}</span>}
-            </div>
-          ))}
-
-          <div className="col-span-full">
-            {/* Address Fields */}
-         <h2 className="text-lg font-medium mt-6">Address</h2>
-         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-         {addressFields.map((field) => (
-            <div key={field.label}>
+          {[...formFields, ...addressFields].map((field) => (
+            <div key={field.name}>
               <label className="block font-medium">{field.label}</label>
-              <input
-                type={field.type}
-                name={field.name}
-                value={formData[field.name] || ""}
-                onChange={handleInputChange}
-                placeholder={field.placeholder}
-                className="border p-2 w-full rounded-md"
-              />
-                 {errors[field.label] && <p className="text-red-500 text-sm">{errors[field.label]}</p>}
+
+              {field.type === "dropdown" ? (
+                <select
+                  name={field.name}
+                  value={formData[field.name] || ""}
+                  onChange={handleInputChange}
+                  className="border p-2 w-full rounded-md"
+                >
+                  <option value="" disabled>Select</option>
+                  <option value="Own">Own</option>
+                  <option value="Rent">Rent</option>
+                </select>
+              ) : (
+                <input
+                  type={field.type}
+                  name={field.name}
+                  value={formData[field.name] || ""}
+                  onChange={handleInputChange}
+                  placeholder={`Enter ${field.label}`}
+                  className="border p-2 w-full rounded-md"
+                />
+              )}
+
+              {errors[field.name] && <span className="text-red-500 text-sm">{errors[field.name]}</span>}
             </div>
           ))}
-        </div>
-            <h2 className="font-medium">KYC Documents</h2>
-            {["Received Gold", "Aadhar Xerox"].map((doc) => (
-              <label key={doc} className="flex items-center space-x-2 mt-2">
-                <input type="checkbox" className="w-4 h-4" name="kycDocuments" value={doc} onChange={handleCheckboxChange} />
-                <span>{doc}</span>
-              </label>
-            ))}
-          </div>
 
-          <div className="col-span-full">
-            {["goldVerified", "vehicleDocumentsVerified"].map((doc) => (
-              <label key={doc} className="flex items-center space-x-2 mt-2">
-                <input type="checkbox" className="w-4 h-4" name={doc} checked={formData[doc]} onChange={handleCheckboxChange} />
-                <span>{doc.replace(/([A-Z])/g, ' $1').trim()}</span>
-              </label>
-            ))}
-          </div>
+          <h2 className="col-span-full font-medium mt-6">KYC Documents</h2>
+          {["Received Gold", "Aadhar Xerox","gold Verified","vehicle Documents Verified"].map((doc) => (
+            <label key={doc} className="flex items-center space-x-2 mt-2">
+              <input type="checkbox" className="w-4 h-4" name="kycDocuments" value={doc} onChange={handleCheckboxChange} />
+              <span>{doc}</span>
+            </label>
+          ))}
 
-          <div className="flex justify-end gap-3 mt-6">
-            <button type="submit" className="bg-blue-600 text-white px-6 py-2 rounded-lg shadow-md hover:bg-blue-700">
-              {loading ? "Submitting..." : "Apply Now"}
-            </button>
-          </div>
+          <button type="submit" className="bg-blue-600 text-white px-6 py-2 rounded-lg mt-6">{loading ? "Submitting..." : "Apply Now"}</button>
         </form>
       </div>
     </div>

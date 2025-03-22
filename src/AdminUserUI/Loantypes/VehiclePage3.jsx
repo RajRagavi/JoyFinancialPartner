@@ -7,7 +7,10 @@ const VehiclePage3 = ({ formData = {}, setFormData }) => {
   // Start Camera
   const startCamera = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: "environment" }, 
+      });
+  
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
       }
@@ -15,6 +18,7 @@ const VehiclePage3 = ({ formData = {}, setFormData }) => {
       console.error("Error accessing camera:", error);
     }
   };
+  
 
   // Get Location
   const getLocation = () => {

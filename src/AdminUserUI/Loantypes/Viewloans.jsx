@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { db } from "../../Firebase/firebaseConfig";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, updateDoc, doc } from "firebase/firestore";
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
+
+const storage = getStorage();
 
 const ViewLoans = () => {
   const [vehicleLoans, setVehicleLoans] = useState([]);
@@ -13,8 +16,12 @@ const ViewLoans = () => {
       const vehicleSnapshot = await getDocs(collection(db, "vehicle_loans"));
       const goldSnapshot = await getDocs(collection(db, "gold_loans"));
 
-      setVehicleLoans(vehicleSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-      setGoldLoans(goldSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+      // Convert Firestore docs to objects
+      const vehicleLoansData = await processLoanDocs(vehicleSnapshot);
+      const goldLoansData = await processLoanDocs(goldSnapshot);
+
+      setVehicleLoans(vehicleLoansData);
+      setGoldLoans(goldLoansData);
 
       setLoading(false);
     };
@@ -22,15 +29,54 @@ const ViewLoans = () => {
     fetchLoans();
   }, []);
 
+  const processLoanDocs = async (snapshot) => {
+    const loanData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+    // Fetch image URLs if necessary
+    return Promise.all(loanData.map(async (loan) => {
+      const updatedLoan = { ...loan };
+      for (const key in loan) {
+        if (typeof loan[key] === "string" && loan[key].startsWith("images/")) {
+          try {
+            updatedLoan[key] = await getDownloadURL(ref(storage, loan[key]));
+          } catch (error) {
+            console.error("Error fetching image URL:", error);
+          }
+        }
+      }
+      return updatedLoan;
+    }));
+  };
+
+  const approveLoan = async (loanId, loanType) => {
+    const loanRef = doc(db, `${loanType}_loans`, loanId);
+    await updateDoc(loanRef, { approved: true });
+
+    if (loanType === "vehicle") {
+      setVehicleLoans(prevLoans => prevLoans.map(loan => loan.id === loanId ? { ...loan, approved: true } : loan));
+    } else {
+      setGoldLoans(prevLoans => prevLoans.map(loan => loan.id === loanId ? { ...loan, approved: true } : loan));
+    }
+  };
+
   if (loading) {
     return <div className="text-center text-xl font-bold">Loading...</div>;
   }
 
+  const getTableHeaders = (loans) => {
+    if (loans.length === 0) return [];
+    return Object.keys(loans[0]);
+  };
+
+  const getFilteredLoans = () => {
+    return filter === "vehicle" ? vehicleLoans : goldLoans;
+  };
+
   return (
-    <div className="min-h-screen lg:ml-64 px-4 sm:px-6 mt-10">
+    <div className="min-h-screen flex flex-col lg:ml-64 sm:mr-15 mt-10 ">
       <div className="py-6">
         <h2 className="text-xl font-semibold mb-3">View Loans</h2>
-        
+
         {/* Filter Section */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
           <label className="font-semibold">Filter:</label>
@@ -48,63 +94,61 @@ const ViewLoans = () => {
       {/* Loan Tables */}
       <div className="overflow-x-auto w-full">
         <div className="container mt-4">
-          {/* Vehicle Loans Table */}
-          {filter === "vehicle" && (
-            <div className="overflow-x-auto w-full">
-              <h2 className="text-lg font-semibold mb-2">Vehicle Loans</h2>
-              <table className="min-w-full border-collapse border border-blue-300 text-xs sm:text-sm">
-                <thead>
-                  <tr className="bg-blue-200">
-                    <th className="border p-1 sm:p-2">Loan ID</th>
-                    <th className="border p-1 sm:p-2">Customer Name</th>
-                    <th className="border p-1 sm:p-2">Mobile Number</th>
-                    <th className="border p-1 sm:p-2">Vehicle Type</th>
-                    <th className="border p-1 sm:p-2">Loan Amount</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {vehicleLoans.map((loan) => (
-                    <tr key={loan.id} className="bg-blue-100">
-                      <td className="border p-1 sm:p-2">{loan.LoanNo || "N/A"}</td>
-                      <td className="border p-1 sm:p-2">{loan["Customer Name"] || "N/A"}</td>
-                      <td className="border p-1 sm:p-2">{loan["Mobile Number"] || "N/A"}</td>
-                      <td className="border p-1 sm:p-2">{loan["Vehicle Type"] || "N/A"}</td>
-                      <td className="border p-1 sm:p-2">{loan["Loan Amount"] || "N/A"}</td>
-                    </tr>
+          <div className="overflow-x-auto w-full">
+            <h2 className="text-lg font-semibold mb-2">{filter === "vehicle" ? "Vehicle Loans" : "Gold Loans"}</h2>
+            <table className="min-w-full border-collapse border border-blue-300 text-sm">
+              <thead>
+                <tr className="bg-blue-500 text-white">
+                  {getTableHeaders(getFilteredLoans()).map((header) => (
+                    <th key={header} className="border p-2 text-left">{header}</th>
                   ))}
-                </tbody>
-              </table>
-            </div>
-          )}
+                  <th className="border p-2 text-left">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {getFilteredLoans().map((loan) => (
+                  <tr key={loan.id} className={`${loan.approved ? 'bg-gray-300' : 'odd:bg-blue-100 even:bg-blue-200 hover:bg-blue-300'}`}>
+                    {getTableHeaders(getFilteredLoans()).map((header) => (
+                      <td key={header} className="border p-2 text-left">
+                        {loan[header] ? (
+                          // Check if it's a string URL
+                          typeof loan[header] === "string" && loan[header].startsWith("http") ? (
+                            <img src={loan[header]} alt="Document" className="w-16 h-16 object-cover" 
+                              onError={(e) => e.target.style.display = 'none'} />
+                          ) :
+                            // Check if it's an array of URLs
+                            Array.isArray(loan[header]) ? (
+                              loan[header].map((imgUrl, index) => (
+                                <img key={index} src={imgUrl} alt={`Document ${index}`} className="w-16 h-16 object-cover mr-2" 
+                                  onError={(e) => e.target.style.display = 'none'} />
+                              ))
+                            ) :
+                              // Check if it's an object containing a URL
+                              typeof loan[header] === "object" && loan[header]?.url ? (
+                                <img src={loan[header].url} alt="Document" className="w-16 h-16 object-cover" 
+                                  onError={(e) => e.target.style.display = 'none'} />
+                              ) : (
+                                loan[header].toString()
+                              )
+                        ) : "N/A"}
+                      </td>
+                    ))}
 
-          {/* Gold Loans Table */}
-          {filter === "gold" && (
-            <div className="overflow-x-auto w-full">
-              <h2 className="text-lg font-semibold mb-2">Gold Loans</h2>
-              <table className="min-w-full border-collapse border border-blue-300 text-xs sm:text-sm">
-                <thead>
-                  <tr className="bg-blue-200">
-                    <th className="border p-1 sm:p-2">Loan ID</th>
-                    <th className="border p-1 sm:p-2">Borrower Name</th>
-                    <th className="border p-1 sm:p-2">Phone Number</th>
-                    <th className="border p-1 sm:p-2">Gold Weight</th>
-                    <th className="border p-1 sm:p-2">Loan Amount</th>
+                    <td className="border p-2 text-left">
+                      {!loan.approved && (
+                        <button
+                          onClick={() => approveLoan(loan.id, filter)}
+                          className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
+                        >
+                          Approve
+                        </button>
+                      )}
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {goldLoans.map((loan) => (
-                    <tr key={loan.id} className="bg-blue-100">
-                      <td className="border p-1 sm:p-2">{loan.LoanNo || "N/A"}</td>
-                      <td className="border p-1 sm:p-2">{loan["borrower Name"] || "N/A"}</td>
-                      <td className="border p-1 sm:p-2">{loan["phoneNumber"] || "N/A"}</td>
-                      <td className="border p-1 sm:p-2">{loan["goldWeightAfterWastage"] || "N/A"}</td>
-                      <td className="border p-1 sm:p-2">{loan["requiredLoanAmount"] || "N/A"}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
