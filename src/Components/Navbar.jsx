@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import Logo from "../assets/Images/Logo.png";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,11 +14,20 @@ const Navbar = () => {
       <div className="fixed top-0 left-0 w-full z-50 bg-gray-50 shadow-md">
         <div className="container mx-auto flex justify-between items-center px-6 py-5">
           {/* Logo */}
-          <div className="text-xl font-bold cursor-pointer" onClick={() => navigate("/")}>
-            <h1 className="text-gray-800 hover:text-blue-500 transition duration-300">
-              Financial Partner
-            </h1>
+          <div className="flex items-center cursor-pointer" onClick={() => navigate("/")}>
+            {/* Logo Image */}
+            <img
+              src={Logo} // ✅ Change this to your actual logo path
+              alt="Joy Financial Logo"
+              className="h-20 w-full mr-2" // ✅ Adjust height & spacing
+            />
+
+            {/* Brand Name */}
+            {/* <h1 className="text-xl font-bold text-gray-800 hover:text-blue-500 transition duration-300">
+              Joy Financial
+            </h1> */}
           </div>
+
 
           {/* Desktop Menu */}
           <nav className="hidden md:flex space-x-10 text-black cursor-pointer">
@@ -62,14 +72,13 @@ const Navbar = () => {
           initial={{ height: 0, opacity: 0 }}
           animate={{ height: isOpen ? "auto" : 0, opacity: isOpen ? 1 : 0 }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
-          className={`md:hidden overflow-hidden bg-gray-100 flex flex-col items-center py-4 space-y-4 ${
-            isOpen ? "visible" : "invisible"
-          }`}
+          className={`md:hidden overflow-hidden bg-gray-100 flex flex-col items-center py-4 space-y-4 ${isOpen ? "visible" : "invisible"
+            }`}
         >
           <p onClick={() => { navigate("/"); setIsOpen(false); }} className="block hover:text-blue-500 transition duration-300">
             Home
           </p>
-          <p onClick={() => { navigate("/about"); setIsOpen(false); }} className="block hover:text-blue-500 transition duration-300">
+          {/* <p onClick={() => { navigate("/about"); setIsOpen(false); }} className="block hover:text-blue-500 transition duration-300">
             About
           </p>
           <p onClick={() => { navigate("/loans"); setIsOpen(false); }} className="block hover:text-blue-500 transition duration-300">
@@ -77,7 +86,7 @@ const Navbar = () => {
           </p>
           <p onClick={() => { navigate("/contact"); setIsOpen(false); }} className="block hover:text-blue-500 transition duration-300">
             Contact
-          </p>
+          </p> */}
           {/* <button
             onClick={() => { navigate("/login"); setIsOpen(false); }}
             className="block text-blue-500 hover:underline font-bold cursor-pointer"

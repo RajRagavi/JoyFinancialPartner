@@ -65,16 +65,18 @@ const GoldLoan = () => {
 
   const addressFields = [
 
-    { label: "House Own/Rent*", type: "text", placeholder: "House Own/Rent*", required: true  },
-    { label: "Door / Flat Number", type: "text", placeholder: "Enter Door / Flat Number", required: true  },
-    { label: "Street / Lane", type: "text", placeholder: "Enter Street / Lane", required: true  },
-    { label: "Area / Society Name", type: "text", placeholder: "Enter Area / Society Name", required: true  },
-    { label: "City / Village", type: "text", placeholder: "Enter City / Village", required: true  },
-    { label: "District", type: "text", placeholder: "Enter District", required: true  },
-    { label: "State", type: "text", placeholder: "Enter State", required: true  },
-    { label: "Country", type: "text", placeholder: "Enter Country", required: true  },
-    { label: "Pincode", type: "text", placeholder: "Enter Pincode", required: true  },
-    { label: "Landmark", type: "text", placeholder: "Enter Nearby Landmark (Optional)", required: true  },
+    { name:"House",label: "House Own/Rent", type: "text", placeholder: "House Own/Rent", required: true  },
+   
+      { name: "doorNumber", label: "Door / Flat Number", type: "text", placeholder: "Enter Door / Flat Number", required: true },
+      { name: "street", label: "Street / Lane", type: "text", placeholder: "Enter Street / Lane", required: true },
+      { name: "area", label: "Area / Society Name", type: "text", placeholder: "Enter Area / Society Name", required: true },
+      { name: "city", label: "City / Village", type: "text", placeholder: "Enter City / Village", required: true },
+    
+    { name: "District", label: "District", type: "text", placeholder: "Enter District", required: true  },
+    { name:"State", label: "State", type: "text", placeholder: "Enter State", required: true  },
+    { name:"Country", label: "Country", type: "text", placeholder: "Enter Country", required: true  },
+    { name:"Pincode", label: "Pincode", type: "text", placeholder: "Enter Pincode", required: true  },
+    { name:"Landmark", label: "Landmark", type: "text", placeholder: "Enter Nearby Landmark (Optional)", required: true  },
 ];
 const validateForm = () => {
   let newErrors = {};
@@ -197,8 +199,8 @@ const handleInputChange = (e) => {
               <label className="block font-medium">{field.label}</label>
               <input
                 type={field.type}
-                name={field.label}
-                value={formData[field.label] || ""}
+                name={field.name}
+                value={formData[field.name] || ""}
                 onChange={handleInputChange}
                 placeholder={field.placeholder}
                 className="border p-2 w-full rounded-md"

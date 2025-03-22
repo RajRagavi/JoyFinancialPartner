@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { auth, db } from "../Firebase/firebaseConfig"; // Firebase setup
 import { signOut } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
+
+import Logo from "../assets/Images/Logo.png";
 import { 
   FaTachometerAlt, FaSync, FaFileAlt, FaList, FaChartBar, FaPrint, FaSignOutAlt, 
   FaSearch, FaBars, FaTimes, FaChevronDown, FaUsers 
@@ -56,9 +58,18 @@ const Sidebar = () => {
         } lg:translate-x-0`}
       >
         {/* Logo */}
-        <div className="text-center text-lg font-bold text-gray-200 py-4">
-          <span className="text-blue-400">JOY</span> FINANCE
-        </div>
+        <div className="flex justify-center py-4 bg-gradient-to-r from-blue-700 to-gray-800 shadow-md">
+  <div className="bg-white p-2 rounded-lg"> {/* White background & padding */}
+    <img
+      src={Logo} // ✅ Change this to your actual logo path
+      alt="Joy Financial Logo"
+      className="h-16 w-auto" // ✅ Adjust height if needed
+    />
+  </div>
+</div>
+
+
+
 
         {/* Search Bar */}
         <div className="px-4 py-2">

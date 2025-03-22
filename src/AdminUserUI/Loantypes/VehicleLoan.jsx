@@ -13,44 +13,44 @@ import VehiclePage3 from "./VehiclePage3";
 
 const formFields = [
   
-  { label: "Loan No", type: "text",   required: true},
-  { label: "GEO CODE", type: "text",   required: true},
-  { label: "Customer Name", type: "text",  required: true },
-  { label: "Date of Birth", type: "date",  required: true },
-  { label: "Father Name", type: "text",   required: true},
-  { label: "Vehicle Number", type: "number",  required: true },
-  { label: "Vehicle Value", type: "text",  required: true },
-  { label: "Vehicle Type", type: "text",  required: true },
-  { label: "Vehicle Make", type: "text",   required: true},
-  { label: "Vehicle Model & Year", type: "text",  required: true },
-  { label: "Engine Number", type: "text",  required: true },
-  { label: "Borrower Name", type: "text",   required: true},
-  { label: "Monthly Income", type: "number",  required: true },
-  { label: "Mobile Number", type: "number",  required: true },
-  { label: "Alternate Number", type: "number", required: true  },
-  { label: "CoBorrower Name", type: "text",  required: true },
-  { label: "CoBorrower Phone", type: "number",   required: true},
-  { label: "Occupation", type: "text",  required: true },
-  { label: "Loan Required", type: "number",  required: true },
+  { label: "Loan No", type:  "text", required: true },
+  { label: "GEO CODE", type:  "text", required: true },
+  { label: "Customer Name", type:  "text", required: true },
+  { label: "Date of Birth", type: "date",  },
+  { label: "Father Name", type:  "text", required: true },
+  { label: "Vehicle Number", type: "number",  },
+  { label: "Vehicle Value", type:  "text", required: true },
+  { label: "Vehicle Type", type:  "text", required: true },
+  { label: "Vehicle Make", type:  "text", required: true },
+  { label: "Vehicle Model & Year", type:  "text", required: true },
+  { label: "Engine Number", type:  "text", required: true },
+  { label: "Borrower Name", type:  "text", required: true },
+  { label: "Monthly Income", type: "number",  },
+  { label: "Mobile Number", type: "number",  },
+  { label: "Alternate Number", type: "number",  },
+  { label: "CoBorrower Name", type:  "text", required: true },
+  { label: "CoBorrower Phone", type: "number",  },
+  { label: "Occupation", type:  "text", required: true },
+  { label: "Loan Required", type: "number",  },
   { label: "Other EMI", type: "number", required: false },
-  { label: "Tenure", type: "text",   required: true},
-  { label: "Amount", type: "number",  required: true },
-  { label: "Months", type: "number",   required: true},
-  { label: "Interest (%)", type: "number", required: true  },
-  { label: "Chassis Number", type: "number",   required: true},
-  { label: "Date", type: "date",  required: true }
+  { label: "Tenure", type:  "text", required: true },
+  { label: "Amount", type: "number",  },
+  { label: "Months", type: "number",  },
+  { label: "Interest (%)", type: "number",  },
+  { label: "Chassis Number", type: "number",  },
+  { label: "Date", type: "date",  }
 ];
 
 const fileFields = [
-  { label: "Aadhar Front & Back Side Photo",  required: true},
-  { label: "Pan Photo", required: true},
-  { label: "Licence Photo" , required: true},
-  { label: "Bike Live Photos", required: true},
-  { label: "Vehicle Photo Upload", required: true },
-  { label: "RC Image", required: true},
-  { label: "Borrower Image", required: true },
-  { label: "Vehicle Front", required: true},
-  { label: "Vehicle Back" , required: true}
+  { label: "Aadhar Front & Back Side Photo", },
+  { label: "Pan Photo",},
+  { label: "Licence Photo" ,},
+  { label: "Bike Live Photos",},
+  { label: "Vehicle Photo Upload", },
+  { label: "RC Image",},
+  { label: "Borrower Image", },
+  { label: "Vehicle Front",},
+  { label: "Vehicle Back" ,}
 ];
 
 const verificationOptions = [
@@ -67,16 +67,16 @@ const verificationOptions = [
 ];
 const addressFields = [
 
-    { label: "House Own/Rent*", type: "text",   placeholder: "House Own/Rent*",  },
-    { label: "Door / Flat Number", type: "text",   placeholder: "Enter Door / Flat Number",  },
-    { label: "Street / Lane", type: "text",   placeholder: "Enter Street / Lane",  },
-    { label: "Area / Society Name", type: "text",   placeholder: "Enter Area / Society Name",  },
-    { label: "City / Village", type: "text",   placeholder: "Enter City / Village",  },
-    { label: "District", type: "text",   placeholder: "Enter District",  },
-    { label: "State", type: "text",   placeholder: "Enter State",  },
-    { label: "Country", type: "text",   placeholder: "Enter Country",  },
-    { label: "Pincode", type: "text",   placeholder: "Enter Pincode",  },
-    { label: "Landmark", type: "text",   placeholder: "Enter Nearby Landmark (Optional)",  },
+    { label: "House Own/Rent*", type:  "text", required: true  ,placeholder: "House Own/Rent*",  },
+    { label: "Door / Flat Number", type:  "text", required: true  ,placeholder: "Enter Door / Flat Number",  },
+    { label: "Street / Lane", type:  "text", required: true  ,placeholder: "Enter Street / Lane",  },
+    { label: "Area / Society Name", type:  "text", required: true  ,placeholder: "Enter Area / Society Name",  },
+    { label: "City / Village", type:  "text", required: true  ,placeholder: "Enter City / Village",  },
+    { label: "District", type:  "text", required: true  ,placeholder: "Enter District",  },
+    { label: "State", type:  "text", required: true  ,placeholder: "Enter State",  },
+    { label: "Country", type:  "text", required: true  ,placeholder: "Enter Country",  },
+    { label: "Pincode", type:  "text", required: true  ,placeholder: "Enter Pincode",  },
+    { label: "Landmark", type:  "text", required: true  ,placeholder: "Enter Nearby Landmark (Optional)",  },
 ];
 
   
@@ -232,15 +232,22 @@ const finishProcess = async () => {
   for (const key in fileData) {
     uploadedFiles[key] = await uploadFile(fileData[key], key);
   }
+
   const formSubmission = { 
-    ...formData, 
+    ...formData,  // ✅ Step 1, Step 2 & Step 3 Data
     uploadedFiles, 
     timestamp: new Date() 
   };
+
   try {
     await addDoc(collection(db, "vehicle_loans"), formSubmission);
     alert("Process Completed Successfully!");
-    navigate("/kyc-vehicle");
+    
+    // ✅ Reload the page after submission
+    window.location.reload();
+    
+    // OR, if using React Router v6:
+    // navigate(0);
   } catch (error) {
     console.error("Error submitting form:", error);
   }
@@ -352,8 +359,8 @@ useEffect(() => {
                     </div>
                     </form>
                   )}
-          {currentStep === 2 && <VehiclePage2 />}
-          {currentStep === 3 && <VehiclePage3 />}
+          {currentStep === 2 && <VehiclePage2 formData={formData} setFormData={setFormData} />}
+          {currentStep === 3 && <VehiclePage3 formData={formData} setFormData={setFormData} />}
 
            {/* Previous & Next Buttons finish button */}
  <div className="flex justify-end mt-6 space-x-3">
